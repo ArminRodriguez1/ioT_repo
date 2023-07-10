@@ -1,11 +1,31 @@
 <template>
   <div class="dashboard">
-    <h1>Dashboard del Barril con Agua</h1>
-
+    <nav class="navbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-tittle">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Acerca de</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contacto</a>
+        </li>
+      </ul>
+    </nav>
     <!-- Gráfico de nivel de agua -->
     <div class="chart-container">
       <canvas ref="waterLevelChart"></canvas>
     </div>
+    <div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Temperatura</h5>
+    <p class="card-text">10°C</p>
+  </div>
+</div>
   </div>
 </template>
 
@@ -84,20 +104,35 @@ class WaterLevelChart {
   createChart() {
     const waterLevelChartCtx = this.chartElement.getContext('2d');
     this.waterLevelChart = new Chart(waterLevelChartCtx, {
-      type: 'doughnut',
+      type: 'bar',
       data: {
         labels: ['Distancia'],
         datasets: [
           {
-            data: [0, 10],
-            backgroundColor: ['#36A2EB', '#F0F0F0']
+            data: [0, 200],
+            backgroundColor: [
+              'rgba(0, 0, 255, 0.5)', 
+              'rgba(255, 255, 255, 0.2)'
+            ],
+            borderColor: [
+              'rgba(0, 0, 255, 1)', 
+              'rgba(255, 255, 255, 1)' 
+            ],
+            borderWidth: 1
           }
         ]
       },
       options: {
-        cutout: '70%',
-        rotation: -Math.PI,
-        circumference: Math.PI,
+        indexAxis: 'y', 
+        scales: {
+          y: {
+            min: 0,
+            max: 200,
+            ticks: {
+              stepSize: 10 
+            }
+          }
+        },
         plugins: {
           legend: {
             display: false
@@ -109,10 +144,11 @@ class WaterLevelChart {
 
   updateChart(value) {
     this.waterLevelChart.data.datasets[0].data[0] = value;
-    this.waterLevelChart.data.datasets[0].data[1] = 10 - value;
+    this.waterLevelChart.data.datasets[0].data[1] = 150 - value;
     this.waterLevelChart.update();
   }
 }
+
 
 export default {
   name: 'DashboardView',
@@ -138,9 +174,61 @@ export default {
 </script>
 
 <style scoped>
+/* Estilos de la barra de navegación */
+.navbar {
+  background-color: #f8f8f8;
+  padding: 10px;
+}
+
 .chart-container {
-  width: 300px;
-  height: 200px;
+  width: 600px;
+  height: 300px;
   margin: 20px;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+.nav-link:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.nav-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: blue;
+}
+.card {
+  width: 200px;
+  margin: 20px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 16px;
+  color: #333;
 }
 </style>
